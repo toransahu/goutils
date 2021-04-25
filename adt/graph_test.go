@@ -8,7 +8,6 @@ Distributed under terms of the MIT license.
 package adt
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -53,7 +52,6 @@ func TestGraph_TopoSort(t *testing.T) {
 	g.AddEdge(2, 1)
 	g.AddEdge(2, 0)
 	result := g.TopoSort()
-	fmt.Println(result)
 	wanted := []int{2, 0, 3, 4, 1}
 
 	if !reflect.DeepEqual(result, wanted) {
