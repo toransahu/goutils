@@ -6,3 +6,4 @@ Distributed under terms of the MIT license.
 */
 
 // Package "adt" is holder of "Abstract Data Types"
+package adt
