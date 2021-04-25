@@ -94,12 +94,12 @@ func (g *Graph) TopoSort() []int {
 
 	// iterate through all the vertices in the given graph
 	// because the graph could be disconnected
-	// or there could be some unreachable vertices if we start DFS/TopoSort from
+	// or there could be some unreachable vertices when we start DFS/TopoSort from
 	// a random vertex
 	for vertex := range g.AdjacencyList {
-		// and if they are not yet visited
+		// and if the vertex is not yet visited
 		if !visited[vertex] {
-			// and run the TopoSort (a tweaked DFS) for the given vertex
+			// run the TopoSort (a tweaked DFS) for the given vertex
 			g.topoSort(vertex, &visited, &stack)
 		}
 	}
