@@ -9,7 +9,14 @@ Distributed under terms of the MIT license.
 
 package adt
 
-import "fmt"
+import (
+	"fmt"
+
+	myerr "github.com/toransahu/goutils/errors"
+)
+
+var ERR_STACK_IS_NIL myerr.UserDefinedError = "stack is nil"
+var ERR_STACK_IS_EMPTY myerr.UserDefinedError = "stack is empty"
 
 // Stack implemented using slice of interface (should hold any data type)
 type Stack []interface{}
@@ -22,7 +29,7 @@ func NewStack() Stack {
 // isNil (private) errors if the Stack is nil
 func (s *Stack) isNil() error {
 	if *s == nil {
-		return fmt.Errorf("Stack %v is nil", s)
+		return ERR_STACK_IS_EMPTY
 	}
 	return nil
 }
@@ -67,7 +74,7 @@ func (s *Stack) Top() (interface{}, error) {
 		return nil, err
 	}
 	if isEmpty {
-		return nil, fmt.Errorf("Stack %v is empty", s)
+		return nil, ERR_STACK_IS_EMPTY
 	}
 	return (*s)[len(*s)-1], nil
 }

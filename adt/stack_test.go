@@ -67,16 +67,16 @@ func TestStack_IsEmpty_Push_Pop_Top(t *testing.T) {
 	}
 	popped, err = s.Pop()
 	if err == nil {
-		t.Errorf("wanted: Error<Stack &[] is empty>; got: %v", err)
+		t.Errorf("wanted: %v; got: %v", ERR_STACK_IS_EMPTY, err)
 	}
 	popped, err = s.Pop()
 	if err == nil {
-		t.Errorf("wanted: Error<Stack &[] is empty>; got: %v", err)
+		t.Errorf("wanted: %v; got: %v", ERR_STACK_IS_EMPTY, err)
 	}
 
 	// test Top()
 	top, err = s.Top()
 	if err == nil {
-		t.Errorf("wanted: Error<Stack &[] is empty>; got: %v", err)
+		t.Errorf("wanted: %v; got: %v", ERR_STACK_IS_EMPTY, err)
 	}
 }
