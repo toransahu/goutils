@@ -62,19 +62,51 @@ func (l *SLinkedlist) Append(data interface{}) *SLLNode {
 
 // InsertAfter adds the given node after the given node of the Singly Linkedlist
 func (l *SLinkedlist) InsertAfter(after *SLLNode, data interface{}) *SLLNode {
+	// error if empty
 	node := NewSLLNode(data)
-	tmp := after.Next
-	after.Next = node
-	node.Next = tmp
-	return node
+	if l.Head == after {
+		node.Next = l.Head.Next
+		l.Head.Next = node
+		return l.Head.Next
+	}
+
+	curr := l.Head
+	for {
+		if curr.Next == nil {
+			break
+		}
+		if curr.Next == after {
+			node.Next = curr.Next.Next
+			curr.Next = node
+			return curr.Next
+		}
+		curr = curr.Next
+	}
+	return nil // error
 }
 
 // InsertBefore adds the given node before the given node of the Singly Linkedlist
 func (l *SLinkedlist) InsertBefore(before *SLLNode, data interface{}) *SLLNode {
+	// error if empty
 	node := NewSLLNode(data)
-	node.Next = before
-	before = node
-	return node
+
+	if l.Head == before {
+		return l.InsertBeginning(data)
+	}
+
+	curr := l.Head
+	for {
+		if curr.Next == nil {
+			break
+		}
+		if curr.Next == before {
+			node.Next = curr.Next
+			curr.Next = node
+			return curr.Next
+		}
+		curr = curr.Next
+	}
+	return nil // error
 }
 
 // InsertBeginning adds the given node the beginning of the Singly Linkedlist

@@ -11,6 +11,8 @@ package adt
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSLinkedList_NewSLinkedList(t *testing.T) {
@@ -68,9 +70,37 @@ func TestSLinkedList_Iterate(t *testing.T) {
 }
 
 func TestSLinkedList_InsertAfter(t *testing.T) {
+	l := NewSLinkedList()
+	l.Append(1)
+	node := l.InsertAfter(l.Head, 0)
+
+	got := []int{}
+	want := []int{1, 0}
+	for n := range l.Iterate() {
+		got = append(got, n.Data.(int))
+	}
+	assert.Equal(t, got, want)
+	assert.Equal(t, l.Head.Next, node)
+	assert.Nil(t, node.Next)
+	assert.Nil(t, l.Head.Next.Next)
 }
 
 func TestSLinkedList_InsertBefore(t *testing.T) {
+	l := NewSLinkedList()
+	l.Append(1)
+	olderHead := l.Head
+	node := l.InsertBefore(l.Head, 0)
+
+	got := []int{}
+	want := []int{0, 1}
+	for n := range l.Iterate() {
+		got = append(got, n.Data.(int))
+	}
+	assert.Equal(t, got, want)
+	assert.Equal(t, l.Head, node, "node should be head of the SLL")
+	assert.Equal(t, l.Head.Next, node.Next, "node.Next should be head.Next of the SLL")
+	assert.Equal(t, olderHead, l.Head.Next)
+	assert.Equal(t, olderHead, node.Next)
 }
 
 func TestSLinkedList_InsertBeginning(t *testing.T) {
