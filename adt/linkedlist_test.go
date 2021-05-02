@@ -9,6 +9,7 @@ Distributed under terms of the MIT license.
 package adt
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -34,6 +35,35 @@ func TestSLinkedList_Append(t *testing.T) {
 	}
 	if got := l.Head.Data; got != 1 {
 		t.Errorf("want: 1; got: %v", got)
+	}
+	l.Append(2)
+	if got := l.Head.Next.Data; got != 2 {
+		t.Errorf("want: 2; got: %v", got)
+	}
+}
+
+func TestSLinkedList_Iterate(t *testing.T) {
+	l := NewSLinkedList()
+	l.Append(1)
+	l.Append(2)
+	l.Append(3)
+	l.Append(4)
+
+	got := [][]int{}
+	for i := range l.Iterate() {
+		currData := i.Data.(int)
+		next := i.Next
+		var nextData int = -1
+		if next != nil {
+			nextData = i.Next.Data.(int)
+		}
+		got = append(got, []int{currData, nextData})
+	}
+	wanted := [][]int{
+		{1, 2}, {2, 3}, {3, 4}, {4, -1},
+	}
+	if !reflect.DeepEqual(got, wanted) {
+		t.Error()
 	}
 }
 

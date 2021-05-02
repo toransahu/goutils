@@ -9,7 +9,9 @@ Distributed under terms of the MIT license.
 
 package adt
 
-import myerr "github.com/toransahu/goutils/errors"
+import (
+	myerr "github.com/toransahu/goutils/errors"
+)
 
 var ERR_SLL_IS_EMPTY myerr.UserDefinedError = "single linkedlist is empty"
 var ERR_SLLNODE_IS_NIL myerr.UserDefinedError = "sll node is nil"
@@ -48,12 +50,13 @@ func (l *SLinkedlist) Append(data interface{}) *SLLNode {
 		l.Head = node
 		return node
 	}
+	curr := l.Head
 	for {
-		next := l.Head.Next
-		if next == nil {
-			next = node
-			return node
+		if curr.Next == nil {
+			curr.Next = node
+			return curr.Next
 		}
+		curr = curr.Next
 	}
 }
 
@@ -79,7 +82,7 @@ func (l *SLinkedlist) InsertBeginning(data interface{}) *SLLNode {
 	node := NewSLLNode(data)
 	node.Next = l.Head
 	l.Head = node
-	return node
+	return l.Head
 }
 
 // Remove deletes the given node from the Singly Linkedlist
@@ -96,19 +99,41 @@ func (l *SLinkedlist) Remove(node *SLLNode) error {
 		return nil
 	}
 
-	next := l.Head.Next
+	curr := l.Head
 	for {
-		if next == nil {
+		if curr.Next == nil {
 			break
 		}
-		if next == node {
-			next = next.Next
+		if curr.Next == node {
+			curr = curr.Next
 			return nil
 		}
-		next = next.Next
+		curr = curr.Next
 	}
 
 	return ERR_SLLNODE_DOES_NOT_EXISTS
+}
+
+func (l *SLinkedlist) Iterate() <-chan *SLLNode {
+	ch := make(chan *SLLNode)
+	if l.IsEmpty() {
+		defer close(ch)
+		return ch
+	}
+
+	go func() {
+		defer close(ch)
+		curr := l.Head
+		for {
+			if curr.Next == nil {
+				ch <- curr
+				break
+			}
+			ch <- curr
+			curr = curr.Next
+		}
+	}()
+	return ch
 }
 
 // TODO: implement Doubly Linkedlist (List)
