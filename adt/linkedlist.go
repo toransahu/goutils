@@ -43,9 +43,8 @@ func (l *SLinkedlist) IsEmpty() bool {
 	return l.Head == nil
 }
 
-// Append adds a node at the end of the Singly Linkedlist
-func (l *SLinkedlist) Append(data interface{}) *SLLNode {
-	node := NewSLLNode(data)
+// AppendNode adds a node at the end of the Singly Linkedlist
+func (l *SLinkedlist) AppendNode(node *SLLNode) *SLLNode {
 	if l.IsEmpty() {
 		l.Head = node
 		return node
@@ -58,6 +57,12 @@ func (l *SLinkedlist) Append(data interface{}) *SLLNode {
 		}
 		curr = curr.Next
 	}
+}
+
+// Append adds an element at the end of the Singly Linkedlist
+func (l *SLinkedlist) Append(data interface{}) *SLLNode {
+	node := NewSLLNode(data)
+	return l.AppendNode(node)
 }
 
 // InsertAfter adds the given node after the given node of the Singly Linkedlist
