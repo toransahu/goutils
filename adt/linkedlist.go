@@ -45,6 +45,7 @@ func (l *SLinkedlist) IsEmpty() bool {
 
 // AppendNode adds a node at the end of the Singly Linkedlist
 func (l *SLinkedlist) AppendNode(node *SLLNode) *SLLNode {
+	node.Next = nil
 	if l.IsEmpty() {
 		l.Head = node
 		return node
