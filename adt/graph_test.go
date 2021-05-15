@@ -69,6 +69,18 @@ func TestGraph_TopoSort(t *testing.T) {
 	result, hasCycle = g.TopoSort()
 	assert.True(t, hasCycle)
 	assert.Nil(t, result)
+
+	g = NewGraph(6)
+	g.AddEdge(5, 2)
+	g.AddEdge(5, 0)
+	g.AddEdge(2, 3)
+	g.AddEdge(3, 1)
+	g.AddEdge(4, 0)
+	g.AddEdge(4, 1)
+	result, hasCycle = g.TopoSort()
+	assert.False(t, hasCycle)
+	assert.Equal(t, []int{5, 4, 2, 3, 1, 0}, result)
+
 }
 
 func TestGraph_IsCyclic(t *testing.T) {
@@ -80,4 +92,14 @@ func TestGraph_IsCyclic(t *testing.T) {
 	if !result {
 		t.Errorf("for given %v, wanted: %v, got: %v", g, true, result)
 	}
+
+	g = NewGraph(6)
+	g.AddEdge(5, 2)
+	g.AddEdge(5, 0)
+	g.AddEdge(2, 3)
+	g.AddEdge(3, 1)
+	g.AddEdge(4, 0)
+	g.AddEdge(4, 1)
+	result = g.IsCyclic()
+	assert.False(t, result)
 }

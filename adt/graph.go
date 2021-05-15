@@ -160,9 +160,8 @@ func (g *Graph) topoSort(vertex int, visited *map[int]bool, stack *Stack, recent
 		if hasCycle {
 			return true
 		}
-
-		*recentlyVisited = map[int]bool{}
 	}
+	*recentlyVisited = map[int]bool{}
 
 	// push the vertex into the stack
 	stack.Push(vertex)
