@@ -84,22 +84,81 @@ func TestGraph_TopoSort(t *testing.T) {
 }
 
 func TestGraph_IsCyclic(t *testing.T) {
-	g := NewGraph(2)
-	g.AddEdge(0, 1)
-	g.AddEdge(1, 0)
-	result := g.IsCyclic()
+	/*
 
-	if !result {
-		t.Errorf("for given %v, wanted: %v, got: %v", g, true, result)
+		1  -->  0
+		^       |
+		|_______|
+
+	*/
+	g1 := NewGraph(2)
+	g1.AddEdge(0, 1)
+	g1.AddEdge(1, 0)
+
+	/*
+
+			  	   5----->2
+			      /        \
+			     /          \
+			    v            v
+		        0            3
+			    ^            ^
+			     \          /
+			      \        /
+			       4----->1
+
+	*/
+	g2 := NewGraph(6)
+	g2.AddEdge(5, 2)
+	g2.AddEdge(5, 0)
+	g2.AddEdge(2, 3)
+	g2.AddEdge(3, 1)
+	g2.AddEdge(4, 0)
+	g2.AddEdge(4, 1)
+
+	/*
+		------> 0
+		^       |
+		|_______|
+
+	*/
+	g3 := NewGraph(1)
+	g3.AddEdge(0, 0)
+
+	/*
+			    0
+		  	   / ^
+		      /   \
+		     /     \
+		    v       \
+			1 -----> 2
+
+	*/
+	g4 := NewGraph(3)
+	g4.AddEdge(0, 1)
+	g4.AddEdge(1, 2)
+	g4.AddEdge(2, 0)
+
+	testcases := []struct {
+		given *Graph
+		want  bool
+	}{
+		{g1, true},
+		{g2, false},
+		{g3, true},
+		{g4, true},
 	}
 
-	g = NewGraph(6)
-	g.AddEdge(5, 2)
-	g.AddEdge(5, 0)
-	g.AddEdge(2, 3)
-	g.AddEdge(3, 1)
-	g.AddEdge(4, 0)
-	g.AddEdge(4, 1)
-	result = g.IsCyclic()
-	assert.False(t, result)
+	for _, tc := range testcases {
+
+		got := tc.given.IsCyclic()
+		if got != tc.want {
+			t.Errorf("for given %v, wanted: %v, got: %v", tc.given, tc.want, got)
+		}
+
+		got = tc.given.IsCyclic_V2()
+		if got != tc.want {
+			t.Errorf("for given %v, wanted: %v, got: %v", tc.given, tc.want, got)
+		}
+	}
 }

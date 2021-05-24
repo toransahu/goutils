@@ -212,6 +212,62 @@ func (g *Graph) isCyclic(vertex int, visited *map[int]bool, recentlyVisited *map
 	return false
 }
 
+// IsCyclic_V2 detects cycle in a directed graph using BFS by maintaing 3 colors of each node
+func (g *Graph) IsCyclic_V2() bool {
+	// a memory map to flag the visited vertices
+	visited := map[int]bool{}
+	for vertex := range g.AdjacencyList {
+		if visited[vertex] {
+			continue
+		}
+		// as this is a directed graph (and may be disconnected as well)
+		// there could be possibilities that a few vertices remain unreachable
+		// so in such case, iterate over all the vertices
+		isCyclic := g.isCyclic_V2(vertex, &visited)
+		if isCyclic {
+			return true
+		}
+	}
+	return false
+}
+
+func (g *Graph) isCyclic_V2(vertex int, visited *map[int]bool) bool {
+	// a memory map to flag the visited vertices
+	colors := map[int]int{}
+
+	q := NewQueue()
+	q.Enqueue(vertex)
+
+	colors[vertex] = 0
+	(*visited)[vertex] = true
+
+	for {
+		if q.IsEmpty() {
+			break
+		}
+
+		n, err := q.Dequeue()
+		if err != nil {
+			panic(err)
+		}
+		node := n.(int)
+		colors[node] = -1
+		(*visited)[vertex] = true
+
+		for neighbor := range g.AdjacencyList[node] {
+			if colors[neighbor] == -1 {
+				return true
+			}
+			if (*visited)[neighbor] {
+				continue
+			}
+			q.Enqueue(neighbor)
+			colors[neighbor] = 0
+		}
+	}
+	return false
+}
+
 /* TODO - Better design
 
 type Graph interface{}
