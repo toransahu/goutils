@@ -102,9 +102,9 @@ func TestGraph_IsCyclic(t *testing.T) {
 			     /          \
 			    v            v
 		        0            3
-			    ^            ^
+			    ^            /
 			     \          /
-			      \        /
+			      \        v
 			       4----->1
 
 	*/
@@ -160,5 +160,11 @@ func TestGraph_IsCyclic(t *testing.T) {
 		if got != tc.want {
 			t.Errorf("for given %v, wanted: %v, got: %v", tc.given, tc.want, got)
 		}
+
+		got = tc.given.IsCyclic_V3()
+		if got != tc.want {
+			t.Errorf("for given %v, wanted: %v, got: %v", tc.given, tc.want, got)
+		}
+
 	}
 }

@@ -254,7 +254,7 @@ func (g *Graph) isCyclic_V2(vertex int, visited *map[int]bool) bool {
 		colors[node] = -1
 		(*visited)[vertex] = true
 
-		for neighbor := range g.AdjacencyList[node] {
+		for _, neighbor := range g.AdjacencyList[node] {
 			if colors[neighbor] == -1 {
 				return true
 			}
@@ -266,6 +266,81 @@ func (g *Graph) isCyclic_V2(vertex int, visited *map[int]bool) bool {
 		}
 	}
 	return false
+}
+
+// IsCyclic_V3 detects cycle in a directed graph using BFS by manupulating (reducing) in-degree of the node
+// Idea: If there exists a cycle, then the vertices involved in the cycle would have in-degree greater than zero. So, if we remove all the vertices having in-degree == 0 in the graph and find that the graph is left with all the vertices having in-degree > 0; we can conclude the graph have a cycle.
+func (g *Graph) IsCyclic_V3() bool {
+	// to hold the visited vertices
+	visited := map[int]bool{}
+
+	// to hold the in-degrees of each vertex
+	inDegreeMap := map[int]int{}
+
+	// calculate in-degrees
+	for _, neighbors := range g.AdjacencyList {
+		for _, neighbor := range neighbors {
+			inDegreeMap[neighbor]++
+		}
+	}
+
+	// pre-check
+	// if in-degree of all the vertices are > 0 then declare the graph cyclic
+	for _, inD := range inDegreeMap {
+		if inD != 0 {
+			continue
+		}
+		return true
+	}
+
+	// number of vertices we successfully removed from the graph (whose in-degree is/become zero)
+	removed := 0
+
+	// as this is a directed graph (and may be disconnected as well)
+	// there could be possibilities that a few vertices remain unreachable
+	// so in such case, iterate over all the vertices
+	for vertex := range g.AdjacencyList {
+		// but run the check for only those vertices which are un-visited and have in-degree == 0
+		if visited[vertex] || inDegreeMap[vertex] != 0 {
+			continue
+		}
+		g.isCyclic_V3(vertex, visited, &removed, inDegreeMap)
+		if removed == len(g.AdjacencyList) {
+			return false
+		}
+	}
+	return true
+}
+
+func (g *Graph) isCyclic_V3(vertex int, visited map[int]bool, removed *int, inDegreeMap map[int]int) {
+	q := NewQueue()
+	q.Enqueue(vertex)
+
+	for {
+		if q.IsEmpty() {
+			break
+		}
+
+		n, err := q.Dequeue()
+		if err != nil {
+			panic(err)
+		}
+		node := n.(int)
+		visited[node] = true
+		// as we removed this vertex from the graph, increase the counter
+		(*removed)++
+
+		for _, neighbor := range g.AdjacencyList[node] {
+			// as we removed the parent of this vertex, decrease its in-degree by 1
+			inDegreeMap[neighbor]--
+			inDegree := inDegreeMap[neighbor]
+			// if thi vertex's in-degree became zero, now we need to do the whole procedure for this vertex as well
+			if inDegree == 0 {
+				// so enqueue it
+				q.Enqueue(neighbor)
+			}
+		}
+	}
 }
 
 /* TODO - Better design
