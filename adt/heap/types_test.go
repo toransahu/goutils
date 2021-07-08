@@ -17,6 +17,7 @@ import (
 func TestIntArray(t *testing.T) {
 	arr := IntArray{1, 2, 3, 4}
 	assert.True(t, arr.LessThan(0, 1))
+	assert.True(t, arr.GreaterThan(1, 0))
 	assert.Equal(t, len(arr), arr.Len())
 	assert.Equal(t, arr[0], arr.ItemAt(0))
 

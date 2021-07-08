@@ -11,6 +11,7 @@ package heap
 type IntArray []int
 
 func (a IntArray) LessThan(i, j int) bool      { return a[i] < a[j] }
+func (a IntArray) GreaterThan(i, j int) bool   { return a[i] > a[j] }
 func (a IntArray) Len() int                    { return len(a) }
 func (a IntArray) Swap(i, j int)               { a[i], a[j] = a[j], a[i] }
 func (a IntArray) ItemAt(i int) interface{}    { return a[i] }
