@@ -6,6 +6,13 @@ Distributed under terms of the MIT license.
 
 A good discussion & exercise on Inheretance Vs Composition in Golang.
 https://github.com/golang/go/issues/22013
+
+Ref:
+1. https://golang.org/pkg/container/heap/
+2. https://golang.org/src/container/heap/heap.go
+3. https://cs.gmu.edu/~kauffman/cs310/w15-1.pdf
+4. https://runestone.academy/runestone/books/published/pythonds/Trees/BinaryHeapImplementation.html
+5. https://www.growingwiththeweb.com/data-structures/binary-heap/build-heap-proof/
 */
 
 // Package heap implements Heap using Array representation of a binary tree
@@ -104,28 +111,28 @@ func percolateDown(arr Interface, i int) {
 		return
 	}
 
-	// suppose minimun Node index is the given node's
-	minimunNodePos := i
+	// suppose minimum Node index is the given node's
+	minimumNodePos := i
 	// get the left child index
 	leftChildPos := heapLeftChildPos(i)
 	// get the right child index
 	rightChildPos := heapRightChildPos(i)
 
-	// if left child exists and if left child is less than the node at minimunNodePos
-	if leftChildPos < size && arr.LessThan(leftChildPos, minimunNodePos) {
-		minimunNodePos = leftChildPos
+	// if left child exists and if left child is less than the node at minimumNodePos
+	if leftChildPos < size && arr.LessThan(leftChildPos, minimumNodePos) {
+		minimumNodePos = leftChildPos
 	}
-	// if right child exists and if right child is less than the node at minimunNodePos
-	if rightChildPos < size && arr.LessThan(rightChildPos, minimunNodePos) {
-		minimunNodePos = rightChildPos
+	// if right child exists and if right child is less than the node at minimumNodePos
+	if rightChildPos < size && arr.LessThan(rightChildPos, minimumNodePos) {
+		minimumNodePos = rightChildPos
 	}
 
-	// if the given node is not the minimun node
-	if i != minimunNodePos {
-		// then swap the node with the minimunNodePos child
-		arr.Swap(minimunNodePos, i)
-		// and percolateDown the node at index minimunNodePos
-		percolateDown(arr, minimunNodePos)
+	// if the given node is not the minimum node
+	if i != minimumNodePos {
+		// then swap the node with the minimumNodePos child
+		arr.Swap(minimumNodePos, i)
+		// and percolateDown the node at index minimumNodePos
+		percolateDown(arr, minimumNodePos)
 	}
 }
 
